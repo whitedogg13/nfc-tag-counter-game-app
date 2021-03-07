@@ -64,6 +64,7 @@
 		C7234A4363EC04BB498F5C37 /* Pods-TagCounterGame.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TagCounterGame.release.xcconfig"; path = "Target Support Files/Pods-TagCounterGame/Pods-TagCounterGame.release.xcconfig"; sourceTree = "<group>"; };
 		C7980A10779667D8E0AFE16B /* Pods-TagCounterGame.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TagCounterGame.debug.xcconfig"; path = "Target Support Files/Pods-TagCounterGame/Pods-TagCounterGame.debug.xcconfig"; sourceTree = "<group>"; };
 		CC08CCB223EAB40D16BDD77A /* Pods-TagCounterGame-TagCounterGameTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TagCounterGame-TagCounterGameTests.debug.xcconfig"; path = "Target Support Files/Pods-TagCounterGame-TagCounterGameTests/Pods-TagCounterGame-TagCounterGameTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D670679925F527CE00A237A3 /* TagCounterGame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TagCounterGame.entitlements; path = TagCounterGame/TagCounterGame.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		FC9E491CF69FB758E1185EF5 /* Pods-TagCounterGame-TagCounterGameTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TagCounterGame-TagCounterGameTests.release.xcconfig"; path = "Target Support Files/Pods-TagCounterGame-TagCounterGameTests/Pods-TagCounterGame-TagCounterGameTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -125,6 +126,7 @@
 		13B07FAE1A68108700A75B9A /* TagCounterGame */ = {
 			isa = PBXGroup;
 			children = (
+				D670679925F527CE00A237A3 /* TagCounterGame.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -148,7 +150,6 @@
 				869DA9EA535351B3806A8430 /* Pods-TagCounterGame-tvOSTests.debug.xcconfig */,
 				9ED2505D945441E72F4DB8BB /* Pods-TagCounterGame-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -294,6 +295,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 25CCLYA564;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -655,7 +657,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TagCounterGame/TagCounterGame.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 25CCLYA564;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = TagCounterGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -664,7 +668,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.richiehsieh.tagcountergame;
 				PRODUCT_NAME = TagCounterGame;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -678,7 +682,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TagCounterGame/TagCounterGame.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 25CCLYA564;
 				INFOPLIST_FILE = TagCounterGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -686,7 +692,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.richiehsieh.tagcountergame;
 				PRODUCT_NAME = TagCounterGame;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
