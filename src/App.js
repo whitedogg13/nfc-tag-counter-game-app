@@ -7,7 +7,11 @@ function App(props) {
 
   React.useEffect(() => {
     async function checkNfc() {
-      setHasNfc(await NfcManager.isSupported());
+      const supported = await NfcManager.isSupported();
+      if (supported) {
+        await NfcManager.start();
+      }
+      setHasNfc(supported);
     }
 
     checkNfc();
