@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import NfcManager from 'react-native-nfc-manager';
+import Game from './Game';
 
 function App(props) {
   const [hasNfc, setHasNfc] = React.useState(null);
@@ -27,11 +28,7 @@ function App(props) {
     );
   }
 
-  return (
-    <View style={styles.wrapper}>
-      <Text>Hello NFC!</Text>
-    </View>
-  );
+  return <Game />;
 }
 
 const styles = StyleSheet.create({
