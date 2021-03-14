@@ -1,8 +1,17 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import NfcManager from 'react-native-nfc-manager';
 
 function App(props) {
   const [hasNfc, setHasNfc] = React.useState(null);
+
+  React.useEffect(() => {
+    async function checkNfc() {
+      setHasNfc(await NfcManager.isSupported());
+    }
+
+    checkNfc();
+  }, []);
 
   if (hasNfc === null) {
     return null;
