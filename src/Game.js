@@ -10,6 +10,7 @@ function Game(props) {
     let count = 5;
     NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
       count--;
+      NfcManager.setAlertMessageIOS(`${count}...`);
       if (count <= 0) {
         NfcManager.unregisterTagEvent().catch(() => 0);
         setDuration(new Date().getTime() - start.getTime());
