@@ -4,6 +4,7 @@ import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
 
 function Game(props) {
   const [start, setStart] = React.useState(null);
+  const [duration, setDuration] = React.useState(0);
 
   React.useEffect(() => {
     let count = 5;
@@ -11,7 +12,7 @@ function Game(props) {
       count--;
       if (count <= 0) {
         NfcManager.unregisterTagEvent().catch(() => 0);
-        console.warn(new Date().getTime() - start.getTime());
+        setDuration(new Date().getTime() - start.getTime());
       }
     });
 
@@ -23,11 +24,13 @@ function Game(props) {
   async function scanTag() {
     await NfcManager.registerTagEvent();
     setStart(new Date());
+    setDuration(0);
   }
 
   return (
     <View style={styles.wrapper}>
       <Text>NFC Game</Text>
+      {duration > 0 && <Text>{duration} ms</Text>}
       <TouchableOpacity style={styles.btn} onPress={scanTag}>
         <Text>START</Text>
       </TouchableOpacity>
