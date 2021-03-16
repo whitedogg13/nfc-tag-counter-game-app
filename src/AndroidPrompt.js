@@ -6,38 +6,77 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Animated,
 } from 'react-native';
 
 function AndroidPrompt(props, ref) {
+  const [_visible, _setVisible] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [hintText, setHintText] = React.useState('');
+  const animValue = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
     if (ref) {
       ref.current = {
-        setVisible,
+        setVisible: _setVisible,
         setHintText,
       };
     }
   }, [ref]);
 
+  React.useEffect(() => {
+    if (_visible) {
+      setVisible(true);
+      Animated.timing(animValue, {
+        duration: 300,
+        toValue: 1,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(animValue, {
+        duration: 300,
+        toValue: 0,
+        useNativeDriver: true,
+      }).start(() => {
+        setVisible(false);
+        setHintText('');
+      });
+    }
+  }, [_visible, animValue]);
+
+  const backdropAnimStyle = {
+    opacity: animValue,
+  };
+
+  const promptAnimStyle = {
+    transform: [
+      {
+        translateY: animValue.interpolate({
+          inputRange: [0, 1],
+          outputRange: [500, 0],
+        }),
+      },
+    ],
+  };
+
   return (
     <Modal visible={visible} transparent={true}>
       <View style={styles.content}>
-        <View style={[styles.backdrop, StyleSheet.absoluteFill]} />
+        <Animated.View
+          style={[styles.backdrop, StyleSheet.absoluteFill, backdropAnimStyle]}
+        />
 
-        <View style={styles.prompt}>
+        <Animated.View style={[styles.prompt, promptAnimStyle]}>
           <Text style={styles.hint}>{hintText || 'Hello NFC'}</Text>
 
           <TouchableOpacity
             style={styles.btn}
             onPress={() => {
-              setVisible(false);
-              setHintText('');
+              _setVisible(false);
             }}>
             <Text>CANCEL</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
       </View>
     </Modal>
   );
