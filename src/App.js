@@ -6,7 +6,7 @@ import AndroidPrompt from './AndroidPrompt';
 
 function App(props) {
   const [hasNfc, setHasNfc] = React.useState(null);
-  const [modalVisible, setModalVisible] = React.useState(false);
+  const promptRef = React.useRef();
 
   React.useEffect(() => {
     async function checkNfc() {
@@ -26,14 +26,14 @@ function App(props) {
     return (
       <View style={styles.wrapper}>
         <Text>You device doesn't support NFC</Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <TouchableOpacity
+          onPress={() => {
+            promptRef.current.setVisible(true);
+          }}>
           <Text>Test</Text>
         </TouchableOpacity>
 
-        <AndroidPrompt
-          visible={modalVisible}
-          onCancel={() => setModalVisible(false)}
-        />
+        <AndroidPrompt ref={promptRef} />
       </View>
     );
   }
