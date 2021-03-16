@@ -8,16 +8,33 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-function AndroidPrompt(props) {
+function AndroidPrompt(props, ref) {
+  const [visible, setVisible] = React.useState(false);
+  const [hintText, setHintText] = React.useState('');
+
+  React.useEffect(() => {
+    if (ref) {
+      ref.current = {
+        setVisible,
+        setHintText,
+      };
+    }
+  }, [ref]);
+
   return (
-    <Modal visible={true} transparent={true}>
+    <Modal visible={visible} transparent={true}>
       <View style={styles.content}>
         <View style={[styles.backdrop, StyleSheet.absoluteFill]} />
 
         <View style={styles.prompt}>
-          <Text style={styles.hint}>Hello NFC</Text>
+          <Text style={styles.hint}>{hintText || 'Hello NFC'}</Text>
 
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => {
+              setVisible(false);
+              setHintText('');
+            }}>
             <Text>CANCEL</Text>
           </TouchableOpacity>
         </View>
@@ -57,4 +74,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AndroidPrompt;
+export default React.forwardRef(AndroidPrompt);
