@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 
 function AndroidPrompt(props, ref) {
-  const {hintText} = props;
   const [visible, setVisible] = React.useState(false);
+  const [hintText, setHintText] = React.useState('');
 
   React.useEffect(() => {
     if (ref) {
       ref.current = {
         setVisible,
+        setHintText,
       };
     }
   }, [ref]);
@@ -30,7 +31,10 @@ function AndroidPrompt(props, ref) {
 
           <TouchableOpacity
             style={styles.btn}
-            onPress={() => setVisible(false)}>
+            onPress={() => {
+              setVisible(false);
+              setHintText('');
+            }}>
             <Text>CANCEL</Text>
           </TouchableOpacity>
         </View>
