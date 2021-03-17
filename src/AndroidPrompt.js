@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 function AndroidPrompt(props, ref) {
+  const {onCancelPress} = props;
   const [_visible, _setVisible] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [hintText, setHintText] = React.useState('');
@@ -72,6 +73,7 @@ function AndroidPrompt(props, ref) {
           <TouchableOpacity
             style={styles.btn}
             onPress={() => {
+              onCancelPress();
               _setVisible(false);
             }}>
             <Text>CANCEL</Text>
