@@ -1,19 +1,31 @@
 import React from 'react';
-import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+import {TouchableOpacity, View, Text, StyleSheet, Platform} from 'react-native';
 import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
+import AndroidPrompt from './AndroidPrompt';
 
 function Game(props) {
   const [start, setStart] = React.useState(null);
   const [duration, setDuration] = React.useState(0);
+  const androidPromptRef = React.useRef();
 
   React.useEffect(() => {
     let count = 5;
     NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
       count--;
-      NfcManager.setAlertMessageIOS(`${count}...`);
+
+      if (Platform.OS === 'android') {
+        androidPromptRef.current.setHintText(`${count}...`);
+      } else {
+        NfcManager.setAlertMessageIOS(`${count}...`);
+      }
+
       if (count <= 0) {
         NfcManager.unregisterTagEvent().catch(() => 0);
         setDuration(new Date().getTime() - start.getTime());
+
+        if (Platform.OS === 'android') {
+          androidPromptRef.current.setVisible(false);
+        }
       }
     });
 
@@ -24,6 +36,9 @@ function Game(props) {
 
   async function scanTag() {
     await NfcManager.registerTagEvent();
+    if (Platform.OS === 'android') {
+      androidPromptRef.current.setVisible(true);
+    }
     setStart(new Date());
     setDuration(0);
   }
@@ -35,6 +50,13 @@ function Game(props) {
       <TouchableOpacity style={styles.btn} onPress={scanTag}>
         <Text>START</Text>
       </TouchableOpacity>
+
+      <AndroidPrompt
+        ref={androidPromptRef}
+        onCancelPress={() => {
+          NfcManager.unregisterTagEvent().catch(() => 0);
+        }}
+      />
     </View>
   );
 }
