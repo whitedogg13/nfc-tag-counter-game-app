@@ -1,5 +1,12 @@
 import React from 'react';
-import {TouchableOpacity, View, Text, StyleSheet, Platform} from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  SafeAreaView,
+} from 'react-native';
 import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
 import AndroidPrompt from './AndroidPrompt';
 
@@ -45,10 +52,20 @@ function Game(props) {
 
   return (
     <View style={styles.wrapper}>
-      <Text>NFC Game</Text>
-      {duration > 0 && <Text>{duration} ms</Text>}
-      <TouchableOpacity style={styles.btn} onPress={scanTag}>
-        <Text>START</Text>
+      <SafeAreaView />
+
+      <Text style={styles.label}>NFC Game</Text>
+
+      <View style={styles.content}>
+        {(duration > 0 && (
+          <Text style={styles.minLabel}>{duration} ms</Text>
+        )) || <Text style={styles.minLabel}>Let's go!</Text>}
+      </View>
+
+      <TouchableOpacity onPress={scanTag}>
+        <View style={styles.btn}>
+          <Text style={styles.playLabel}>PLAY!</Text>
+        </View>
       </TouchableOpacity>
 
       <AndroidPrompt
@@ -57,6 +74,8 @@ function Game(props) {
           NfcManager.unregisterTagEvent().catch(() => 0);
         }}
       />
+
+      <SafeAreaView />
     </View>
   );
 }
@@ -66,12 +85,36 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#1DA1F2',
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  label: {
+    fontSize: 40,
+    color: 'white',
+    marginBottom: 10,
+  },
+  minLabel: {
+    fontSize: 32,
+    color: '#ccc',
+    textAlign: 'center',
+  },
+  playLabel: {
+    fontSize: 28,
+    color: 'black',
+    textAlign: 'center',
   },
   btn: {
-    margin: 15,
-    padding: 15,
-    borderRadius: 8,
-    backgroundColor: '#ccc',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 4,
+    borderColor: 'white',
+    backgroundColor: 'pink',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
