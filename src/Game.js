@@ -18,6 +18,7 @@ function Game(props) {
   React.useEffect(() => {
     let count = 5;
     NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
+      console.warn(JSON.stringify(tag));
       count--;
 
       if (Platform.OS === 'android') {
