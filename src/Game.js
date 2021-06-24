@@ -1,51 +1,82 @@
 import React from 'react';
-import {TouchableOpacity, View, Text, StyleSheet, Alert} from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  SafeAreaView,
+} from 'react-native';
 import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
+import AndroidPrompt from './AndroidPrompt';
 
 function Game(props) {
-  const [startTime, setStartTime] = React.useState(null);
-  const [stopTime, setStopTime] = React.useState(null);
+  const [start, setStart] = React.useState(null);
+  const [duration, setDuration] = React.useState(0);
+  const androidPromptRef = React.useRef();
 
   React.useEffect(() => {
     let count = 5;
     NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
+      console.warn(JSON.stringify(tag));
       count--;
 
-      if (count === 0) {
-        setStopTime(new Date());
-        NfcManager.unregisterTagEvent().catch(() => 0);
+      if (Platform.OS === 'android') {
+        androidPromptRef.current.setHintText(`${count}...`);
+      } else {
+        NfcManager.setAlertMessageIOS(`${count}...`);
       }
-    });
 
-    NfcManager.setEventListener(NfcEvents.SessionClosed, () => {
-      if (count !== 0) {
-        Alert.alert('Warning', 'Game aborted', [{text: 'OK'}]);
+      if (count <= 0) {
+        NfcManager.unregisterTagEvent().catch(() => 0);
+        setDuration(new Date().getTime() - start.getTime());
+
+        if (Platform.OS === 'android') {
+          androidPromptRef.current.setVisible(false);
+        }
       }
     });
 
     return () => {
       NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
-      NfcManager.setEventListener(NfcEvents.SessionClosed, null);
     };
-  }, [startTime]);
+  }, [start]);
 
-  async function startGame() {
+  async function scanTag() {
     await NfcManager.registerTagEvent();
-    setStartTime(new Date());
-    setStopTime(null);
+    if (Platform.OS === 'android') {
+      androidPromptRef.current.setVisible(true);
+    }
+    setStart(new Date());
+    setDuration(0);
   }
 
   return (
     <View style={styles.wrapper}>
-      <Text>NFC Game</Text>
+      <SafeAreaView />
 
-      {startTime && stopTime && (
-        <Text>{`${stopTime.getTime() - startTime.getTime()}`} ms</Text>
-      )}
+      <Text style={styles.label}>NFC Game</Text>
 
-      <TouchableOpacity style={styles.btn} onPress={startGame}>
-        <Text>START</Text>
+      <View style={styles.content}>
+        {(duration > 0 && (
+          <Text style={styles.minLabel}>{duration} ms</Text>
+        )) || <Text style={styles.minLabel}>Let's go!</Text>}
+      </View>
+
+      <TouchableOpacity onPress={scanTag}>
+        <View style={styles.btn}>
+          <Text style={styles.playLabel}>PLAY!</Text>
+        </View>
       </TouchableOpacity>
+
+      <AndroidPrompt
+        ref={androidPromptRef}
+        onCancelPress={() => {
+          NfcManager.unregisterTagEvent().catch(() => 0);
+        }}
+      />
+
+      <SafeAreaView />
     </View>
   );
 }
@@ -55,12 +86,36 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#1DA1F2',
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  label: {
+    fontSize: 40,
+    color: 'white',
+    marginBottom: 10,
+  },
+  minLabel: {
+    fontSize: 32,
+    color: '#ccc',
+    textAlign: 'center',
+  },
+  playLabel: {
+    fontSize: 28,
+    color: 'black',
+    textAlign: 'center',
   },
   btn: {
-    margin: 15,
-    padding: 15,
-    borderRadius: 8,
-    backgroundColor: '#ccc',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 4,
+    borderColor: 'white',
+    backgroundColor: 'pink',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
